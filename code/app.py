@@ -1,5 +1,6 @@
 import os
 import re
+from pathlib import Path
 import html
 import joblib
 import numpy as np
@@ -166,6 +167,9 @@ st.markdown(
 # -----------------------------------------------------------------------------
 # 2. TEXT CLEANING, STOPWORDS & MODEL LOADING
 # -----------------------------------------------------------------------------
+# Folder containing this app.py (model/CSV files are looked up here, not in the launch dir)
+BASE_DIR = Path(__file__).resolve().parent
+
 HINGLISH_FILLERS = set(ENGLISH_STOP_WORDS).union({
     "hai", "hain", "ho", "tha", "thi", "the", "ke", "ka", "ki", "ko",
     "mein", "me", "se", "par", "aur", "bhi", "hi", "ne", "ye", "yeh",
@@ -187,8 +191,9 @@ def load_model():
         "hinglish_ensemble_lime.joblib",
     ]
     for path in candidates:
-        if os.path.exists(path):
-            return joblib.load(path), path
+        full_path = BASE_DIR / path
+        if full_path.exists():
+            return joblib.load(full_path), path
     return None, None
 
 @st.cache_data
@@ -199,8 +204,9 @@ def load_sample_dataset():
         "hinglish-fake-news-dataset-final-cleaned.csv",
     ]
     for path in csv_candidates:
-        if os.path.exists(path):
-            df = pd.read_csv(path)
+        full_path = BASE_DIR / path
+        if full_path.exists():
+            df = pd.read_csv(full_path)
             text_col = "clean_text" if "clean_text" in df.columns else "text"
             return df[[text_col, "label"]].rename(columns={text_col: "clean_text"}), path
     return None, None
