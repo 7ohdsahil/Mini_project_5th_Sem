@@ -1,27 +1,24 @@
-<div align="center">
-
 # 🛡️ Hinglish Fake News Detector + LIME XAI
 
 **Explainable AI (XAI) for uncovering misinformation in Romanized Hindi–English code-mixed news & social media forwards.**
 
-[![Python 3.9+](https://img.shields.io/badge/Python-3.9%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-[![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-Ensemble-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
-[![Streamlit App](https://img.shields.io/badge/Streamlit-Interactive_UI-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://streamlit.io/)
-[![XAI LIME](https://img.shields.io/badge/Explainable_AI-LIME-6366F1?style=for-the-badge)](https://github.com/marcotcr/lime)
+[![Live Demo](https://img.shields.io/badge/🌐_Live_Web_App-Launch_Now-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://miniproject-5thsem.streamlit.app/)
+[![Python](https://img.shields.io/badge/Python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![scikit-learn](https://img.shields.io/badge/scikit--learn-Soft_Voting_Ensemble-F7931E?style=for-the-badge&logo=scikitlearn&logoColor=white)](https://scikit-learn.org/)
+[![Explainable AI](https://img.shields.io/badge/XAI-LIME_Explainer-6366F1?style=for-the-badge)](https://github.com/marcotcr/lime)
+[![Test Accuracy](https://img.shields.io/badge/Accuracy-85.72%25_%7C_AUC_0.924-22C55E?style=for-the-badge)](#-benchmarks--evaluation)
 
-[![Accuracy](https://img.shields.io/badge/Test_Accuracy-85.72%25-22C55E?style=flat-square)](#-benchmarks--evaluation)
-[![Macro F1](https://img.shields.io/badge/Macro_F1-0.8514-10B981?style=flat-square)](#-benchmarks--evaluation)
-[![ROC AUC](https://img.shields.io/badge/ROC--AUC-0.9244-0EA5E9?style=flat-square)](#-benchmarks--evaluation)
-[![Model Size](https://img.shields.io/badge/Model_Footprint-~22_MB_(CPU)-8B5CF6?style=flat-square)](#-why-this-architecture)
-[![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-brightgreen?style=flat-square)](#-contributing)
-
-[✨ Key Highlights](#-why-this-project-stands-out) •
+[🌐 Live Web App](https://miniproject-5thsem.streamlit.app/) •
+[✨ Why It Stands Out](#-why-this-project-stands-out) •
 [🔍 Visual LIME Demo](#-how-lime-explains-predictions-visual-preview) •
 [🧠 Architecture](#-system-architecture) •
 [📊 Benchmarks](#-benchmarks--evaluation) •
-[🚀 Quick Start](#-quick-start)
+[🚀 Run Locally](#-run-locally)
 
-</div>
+> [!TIP]
+> **🚀 Try the Live Interactive Demo — Zero Setup Required!**
+> Test custom Hinglish headlines, explore 1-click viral hoax presets, and generate real-time LIME word-level explanations directly in your browser:
+> 👉 **[https://miniproject-5thsem.streamlit.app/](https://miniproject-5thsem.streamlit.app/)**
 
 ---
 
@@ -39,46 +36,37 @@ In India, millions of viral WhatsApp forwards and social media posts are written
 
 ## 🔍 How LIME Explains Predictions (Visual Preview)
 
-When you pass a Hinglish headline into the Streamlit dashboard (`app.py`), LIME perturbs the sentence across **900 local variations**, queries our ensemble's calibrated `predict_proba()`, filters out grammatical Hinglish fillers (*hai, ke, ki, mein, aur*), and highlights influential tokens:
+When you enter a Hinglish headline on the [Live Web App](https://miniproject-5thsem.streamlit.app/), LIME perturbs the sentence across **900 local variations**, queries our ensemble's calibrated `predict_proba()`, filters out grammatical Hinglish fillers (*hai, ke, ki, mein, aur*), and highlights influential tokens:
 
-<table>
-<tr>
-<th width="50%">🚨 Fake News Forward Example</th>
-<th width="50%">✅ Verified Real News Example</th>
-</tr>
-<tr>
-<td>
-
+### 🚨 Example 1: Viral WhatsApp Hoax
 **Input:**
 > *"breaking news rbi ne aaj raat se sabhi 500 ke note band karne ka aadesh jari kiya hai forward karein"*
 
 **Verdict:** `🚨 FAKE NEWS (94.18% Confidence)`
 
-**Top LIME Trigger Tokens:**
-- 🔴 `breaking` (`+0.1842` → Fake)
-- 🔴 `band` (`+0.1510` → Fake)
-- 🔴 `forward` (`+0.1435` → Fake)
-- 🔴 `note` (`+0.0980` → Fake)
-- 🟢 `rbi` (`-0.0312` → Real)
+| Token | LIME Weight | Influence Direction |
+| :--- | :---: | :--- |
+| `breaking` | `+0.1842` | 🔴 Pushes toward **Fake News** |
+| `band` | `+0.1510` | 🔴 Pushes toward **Fake News** |
+| `forward` | `+0.1435` | 🔴 Pushes toward **Fake News** |
+| `note` | `+0.0980` | 🔴 Pushes toward **Fake News** |
+| `rbi` | `-0.0312` | 🟢 Pushes toward **Real News** |
 
-</td>
-<td>
+---
 
+### ✅ Example 2: Factual Sports News
 **Input:**
 > *"bharat aur australia ke beech test series ka agla mukabla guruwar se khela jayega team india taiyar"*
 
 **Verdict:** `✅ REAL NEWS (91.64% Confidence)`
 
-**Top LIME Signal Tokens:**
-- 🟢 `series` (`-0.1620` → Real)
-- 🟢 `test` (`-0.1485` → Real)
-- 🟢 `australia` (`-0.1290` → Real)
-- 🟢 `mukabla` (`-0.0940` → Real)
-- 🟢 `team` (`-0.0715` → Real)
-
-</td>
-</tr>
-</table>
+| Token | LIME Weight | Influence Direction |
+| :--- | :---: | :--- |
+| `series` | `-0.1620` | 🟢 Pushes toward **Real News** |
+| `test` | `-0.1485` | 🟢 Pushes toward **Real News** |
+| `australia` | `-0.1290` | 🟢 Pushes toward **Real News** |
+| `mukabla` | `-0.0940` | 🟢 Pushes toward **Real News** |
+| `team` | `-0.0715` | 🟢 Pushes toward **Real News** |
 
 ---
 
@@ -109,11 +97,10 @@ flowchart TD
     style L fill:#7f1d1d,stroke:#f87171,color:#fff
 ```
 
-### 💡 Why This Architecture?
-
-- **Dual Word + Character TF-IDF (`115k` features):** Word 1–3 n-grams catch multi-word traps (*free laptop*, *link par click*), while `char_wb` 3–5 character n-grams match shared phonetic roots across inconsistent Romanized spellings.
-- **Smooth Probability Calibration for LIME:** Raw SVMs lack `predict_proba()`, and tree models produce step-function probabilities that destabilize LIME's local ridge regression. Combining `LogisticRegression`, `CalibratedClassifierCV(LinearSVC)`, and `ComplementNB` produces smooth probability gradients.
-- **Filler-Aware Explanation Filtering:** Grammatical postpositions (*hai, hain, ke, ka, ki, mein, se, aur*) remain visible to the classifier for sentence structure, but are stripped from the LIME attribution chart so users only see meaningful content words.
+### 💡 Key Engineering Decisions
+* **Dual Word + Character TF-IDF (`115k` features):** Word 1–3 n-grams catch multi-word traps (*free laptop*, *link par click*), while `char_wb` 3–5 character n-grams match shared phonetic roots across inconsistent Romanized spellings.
+* **Smooth Probability Calibration for LIME:** Raw SVMs lack `predict_proba()`, and tree models produce step-function probabilities that destabilize LIME's local ridge regression. Combining `LogisticRegression`, `CalibratedClassifierCV(LinearSVC)`, and `ComplementNB` produces smooth probability gradients.
+* **Filler-Aware Explanation Filtering:** Grammatical postpositions (*hai, hain, ke, ka, ki, mein, se, aur*) remain visible to the classifier for sentence structure, but are stripped from the LIME attribution chart so users only see meaningful content words.
 
 ---
 
@@ -129,8 +116,7 @@ Trained and evaluated on **`hinglish-fake-news-dataset-final-cleaned-v2_2.csv`**
 | **CPU Inference Latency** | **< 5 ms** | Enables real-time 900-sample LIME explanations without a GPU |
 
 <details>
-<summary><b>📋 Click to expand Full Classification Report & Confusion Matrix</b></summary>
-
+<summary><b>📋 View Detailed Classification Report & Confusion Matrix</b></summary>
 <br>
 
 | Class | Precision | Recall | F1-Score | Support |
@@ -141,18 +127,17 @@ Trained and evaluated on **`hinglish-fake-news-dataset-final-cleaned-v2_2.csv`**
 | **Weighted Average** | **0.86** | **0.86** | **0.86** | **3,369** |
 
 **Confusion Matrix (`3,369` Test Samples):**
-- **True Real (`0 → 0`):** `1,777` | **False Fake (`0 → 1`):** `188`
-- **False Real (`1 → 0`):** `293` | **True Fake (`1 → 1`):** `1,111`
+* **True Real (`0 → 0`):** `1,777` | **False Fake (`0 → 1`):** `188`
+* **False Real (`1 → 0`):** `293` | **True Fake (`1 → 1`):** `1,111`
 
 </details>
 
 <details>
-<summary><b>🔬 Click to expand Comparison vs. Recent Hinglish Fake News Literature</b></summary>
-
+<summary><b>🔬 Compare Against Prior Hinglish Fake News Research</b></summary>
 <br>
 
 | Dimension | mBERT + Metadata *(Kar et al., 2021)* | CNN / BiLSTM + Static Embeddings | XLM-RoBERTa / IndicBERT / HingBERT | **Ours (Hybrid Ensemble + LIME)** |
-| :--- | :---: | :---: | :---: | :---: |
+| :--- | :--- | :--- | :--- | :--- |
 | **Core Model** | Multilingual BERT + user metadata | 1D-CNN / BiLSTM over FastText/Word2Vec | Fine-tuned code-mixed transformers | **Word + Char TF-IDF Soft-Voting Ensemble** |
 | **Spelling Variants** | Moderate (noisy WordPiece splits) | Weak (high OOV rate) | Strong (requires heavy pre-training) | **Strong** (`char_wb` 3–5 phonetic roots) |
 | **Explainability** | ❌ None (black-box) | ❌ None / raw attention | ❌ None / opaque self-attention | ✅ **Built-in LIME** (causal weights + HTML) |
@@ -162,23 +147,28 @@ Trained and evaluated on **`hinglish-fake-news-dataset-final-cleaned-v2_2.csv`**
 
 ---
 
-## 🚀 Quick Start
+## 🌐 Live Deployment & Local Setup
 
-### 1. Clone & Install Dependencies
+### Option A: Use the Hosted Web Application (Recommended)
+Visit **[https://miniproject-5thsem.streamlit.app/](https://miniproject-5thsem.streamlit.app/)** to explore:
+* **🔍 Live Detector & LIME XAI:** Test custom Hinglish headlines, use 1-click viral hoax presets, or pull a **Random Dataset Row** with ground-truth comparison.
+* **📂 Batch CSV Evaluator:** Upload a CSV file of Hinglish headlines for bulk classification.
+* **📊 Architecture & Viva Overview:** Inspect model KPIs, soft-voting breakdowns, and evaluation metrics.
+
+### Option B: Run Locally on Your Machine
 ```bash
+# 1. Clone the repository
 git clone https://github.com/your-username/hinglish-fake-news-lime.git
 cd hinglish-fake-news-lime
-pip install streamlit scikit-learn joblib lime pandas numpy
-```
 
-### 2. Launch the Interactive Presentation Dashboard
-```bash
+# 2. Install dependencies
+pip install streamlit scikit-learn joblib lime pandas numpy
+
+# 3. Launch the Streamlit app
 streamlit run app.py
 ```
-> [!TIP]
-> The Streamlit dashboard includes **1-click viral hoax presets**, a **Random Dataset Row** sampler (with ground-truth comparison), individual ensemble model vote breakdowns, downloadable LIME HTML reports, and a **Batch CSV Evaluator**.
 
-### 3. CLI Inference & Model Training (Optional)
+### CLI Inference & Model Reproduction
 ```bash
 # Run CLI predictions and export standalone LIME HTML explanations
 python predict_and_explain_lime.py
@@ -208,7 +198,7 @@ hinglish-fake-news-lime/
 - [x] Deduplicate corpus and engineer dual Word + Subword Character TF-IDF pipeline
 - [x] Train Calibrated Soft-Voting Ensemble (`85.72%` accuracy, `0.9244` ROC-AUC)
 - [x] Integrate LIME word-level attribution with Hinglish grammatical stopword filtering
-- [x] Build interactive Streamlit presentation dashboard with batch CSV evaluation
+- [x] Deploy live interactive web dashboard on Streamlit Cloud ([Live App](https://miniproject-5thsem.streamlit.app/))
 - [ ] Add **SHAP (SHapley Additive exPlanations)** global feature importance comparison tab
 - [ ] Support **Devanagari ↔ Roman Hinglish** automatic transliteration at inference time
 - [ ] Package as a lightweight **FastAPI** microservice + Chrome/WhatsApp Web extension
@@ -218,7 +208,3 @@ hinglish-fake-news-lime/
 ## 🤝 Contributing
 
 Contributions, issues, and feature requests are welcome! Feel free to fork this repository, open an issue, or submit a pull request if you'd like to expand the Hinglish stopword lexicon or benchmark additional explainability methods.
-
-<div align="center">
-  <sub>Built with ❤️ for transparent, explainable misinformation detection in Indian code-mixed languages.</sub>
-</div>
